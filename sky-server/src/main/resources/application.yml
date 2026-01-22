@@ -7,11 +7,30 @@ spring:
   main:
     allow-circular-references: true
   datasource:
-    druid:
-      driver-class-name: ${sky.datasource.driver-class-name}
-      url: jdbc:mysql://${sky.datasource.host}:${sky.datasource.port}/${sky.datasource.database}?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true
-      username: ${sky.datasource.username}
-      password: ${sky.datasource.password}
+    url: jdbc:mysql://${sky.datasource.host}:${sky.datasource.port}/${sky.datasource.database}
+    username: ${sky.datasource.username}
+    password: ${sky.datasource.password}
+    driver-class-name: ${sky.datasource.driver-class-name}
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      # 设置是否自动提交事务，默认为true
+      auto-commit: true
+      # 设置用于测试连接的SQL查询语句
+      connection-test-query: SELECT 1
+      # 设置获取数据库连接的超时时间，默认为30秒，单位是毫秒
+      connection-timeout: 30000
+      # 设置连接在连接池中保持空闲的最长时间，默认为10分钟，单位是毫秒
+      idle-timeout: 30000
+      # 设置连接在连接池中允许存在的最长时间，默认为30分钟，单位是毫秒
+      max-lifetime: 1800000
+      # 设置连接池中允许的最大连接数，默认为10
+      maximum-pool-size: 10
+      # 设置连接池中保持的最小空闲连接数，默认为10
+      minimum-idle: 10
+      # 设置连接池的名称，默认为"HikariPool-1"
+      pool-name: HikariPool-1
+      # 设置连接验证的超时时间，默认为5000（5秒），单位是毫秒
+      validation-timeout: 5000
 
 mybatis:
   #mapper配置文件
