@@ -112,4 +112,12 @@ public class EmployeeServiceImpl implements EmployeeService {
         return new PageResult(total, res);
     }
 
+    /**
+     * 员工信息更新
+     * @param employee
+     */
+    public void update(Employee employee) {
+        employeeMapper.update(employee);
+    }
+
 }

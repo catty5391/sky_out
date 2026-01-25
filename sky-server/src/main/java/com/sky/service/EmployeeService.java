@@ -27,4 +27,7 @@ public interface EmployeeService {
      * @return
      */
     PageResult page(EmployeePageQueryDTO employeePageQueryDTO);
+
+
+    void update(Employee employee);
 }

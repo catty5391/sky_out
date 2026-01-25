@@ -102,4 +102,15 @@ public class EmployeeController {
         return Result.success(pageResult);
     }
 
+    @ApiOperation("禁止或启用员工状态")
+    @PostMapping("/status/{status}")
+    public Result<String> setEmployeeStatus(@PathVariable("status") Integer status, long id){
+        log.info("设定员工{}的状态为：{}",id, status);
+        Employee employee = Employee.builder()
+                .id(id)
+                .status(status)
+                .build();
+        employeeService.update(employee);
+        return Result.success(null);
+    }
 }
