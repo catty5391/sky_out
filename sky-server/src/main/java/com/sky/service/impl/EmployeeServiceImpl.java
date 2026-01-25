@@ -120,4 +120,25 @@ public class EmployeeServiceImpl implements EmployeeService {
         employeeMapper.update(employee);
     }
 
+    /**
+     * 通过id获取员工信息
+     * @param id
+     * @return
+     */
+    public Employee getById(long id) {
+        Employee employee = Employee.builder().id(id).build();
+        Employee employeeRes = employeeMapper.getById(employee);
+        employeeRes.setPassword("****");
+        return employeeRes;
+    }
+
+    @Override
+    public void changeEmployee(EmployeeDTO employeeDTO) {
+        Employee employee = new Employee();
+        BeanUtils.copyProperties(employeeDTO, employee);
+        employee.setUpdateTime(LocalDateTime.now());
+        employee.setUpdateUser(BaseContext.getCurrentId());
+        employeeMapper.update(employee);
+    }
+
 }

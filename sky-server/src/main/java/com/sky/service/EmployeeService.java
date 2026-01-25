@@ -30,4 +30,8 @@ public interface EmployeeService {
 
 
     void update(Employee employee);
+
+    Employee getById(long id);
+
+    void changeEmployee(EmployeeDTO employeeDTO);
 }
