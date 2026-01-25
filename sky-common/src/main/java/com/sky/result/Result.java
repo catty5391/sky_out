@@ -33,6 +33,6 @@ public class Result<T> implements Serializable {
         result.msg = msg;
         result.code = 0;
         return result;
-    }
+     }
 
 }
