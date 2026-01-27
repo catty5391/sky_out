@@ -19,7 +19,7 @@ spring:
       connection-test-query: SELECT 1
       # 设置获取数据库连接的超时时间，默认为30秒，单位是毫秒
       connection-timeout: 30000
-      # 设置连接在连接池中保持空闲的最长时间，默认为10分钟，单位是毫秒
+      #设置连接在连接池中保持空闲的最长时间，默认为10分钟，单位是毫秒
       idle-timeout: 30000
       # 设置连接在连接池中允许存在的最长时间，默认为30分钟，单位是毫秒
       max-lifetime: 1800000
@@ -56,3 +56,8 @@ sky:
     admin-ttl: 7200000
     # 设置前端传递过来的令牌名称
     admin-token-name: token
+  minioss:
+    access-key-id: ${sky.minioss.access-key-id}
+    access-key-secret: ${sky.minioss.access-key-secret}
+    bucket-name: ${sky.minioss.bucket-name}
+    end-point: ${sky.minioss.end-point}

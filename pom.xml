@@ -31,6 +31,8 @@
         <jaxb-api>2.3.1</jaxb-api>
         <poi>3.16</poi>
         <hikaricp.version>3.4.5</hikaricp.version>
+        <aws.s3>2.41.14</aws.s3>
+        <awssdk>2.41.14</awssdk>
     </properties>
     <dependencyManagement>
         <dependencies>
@@ -103,6 +105,18 @@
                 <groupId>com.aliyun.oss</groupId>
                 <artifactId>aliyun-sdk-oss</artifactId>
                 <version>${aliyun.sdk.oss}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>software.amazon.awssdk</groupId>
+                <artifactId>s3</artifactId>
+                <version>${aws.s3}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>software.amazon.awssdk</groupId>
+                <artifactId>sts</artifactId>
+                <version>${awssdk}</version>
             </dependency>
 
             <dependency>

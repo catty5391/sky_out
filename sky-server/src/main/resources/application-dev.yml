@@ -6,3 +6,8 @@ sky:
     database: sky_take_out
     username: root
     password: pqh2002P
+  minioss:
+    access-key-id: 5FMKSVa0fYb18mFkFnNY
+    access-key-secret: o5b/kxlY7UmYAmNIW435I9LE6mhrltOcZ8H6QApy
+    bucket-name: sky
+    end-point: http://127.0.0.1:39888
