@@ -3,6 +3,7 @@ package com.sky.mapper;
 import com.sky.annotation.AutoFill;
 import com.sky.entity.Dish;
 import com.sky.enumeration.OperationType;
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
@@ -23,4 +24,13 @@ public interface DishMapper {
      */
     @AutoFill(OperationType.INSERT)
     void insert(Dish dish);
+
+    @Select("select * from dish where id = #{id}")
+    Dish getStatusById(Long id);
+
+    @Delete("delete from dish where id = #{id}")
+    void deleteById(Long id);
+
+    @AutoFill(OperationType.UPDATE)
+    void update(Dish dish);
 }

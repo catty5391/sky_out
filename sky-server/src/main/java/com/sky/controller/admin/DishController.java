@@ -1,8 +1,12 @@
 package com.sky.controller.admin;
 
 
+import com.sky.constant.MessageConstant;
+import com.sky.constant.StatusConstant;
 import com.sky.dto.DishDTO;
 import com.sky.dto.DishPageQueryDTO;
+import com.sky.entity.Dish;
+import com.sky.exception.DeletionNotAllowedException;
 import com.sky.result.PageResult;
 import com.sky.result.Result;
 import com.sky.service.DishService;
@@ -13,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 @RestController
 @Slf4j
@@ -39,6 +44,25 @@ public class DishController {
         PageResult<DishVO> pageResult = dishService.page(dishPageQueryDTO);
 
         return Result.success(pageResult);
+    }
+
+    @ApiOperation("菜品批量删除")
+    @DeleteMapping
+    public Result<String> deleteBatch(@RequestParam List<Long> ids){
+        log.info("删除菜品id: {}", ids);
+        dishService.deleteBatch(ids);
+
+        return Result.success("success");
+    }
+
+    @ApiOperation("起售或停售菜品")
+    @PostMapping("/status/{status}")
+    public Result<String> update(@PathVariable("status") int status, long id){
+        Dish dish = new Dish();
+        dish.setStatus(status);
+        dish.setId(id);
+        dishService.updateStatus(dish);
+        return Result.success("success");
     }
 
 }
