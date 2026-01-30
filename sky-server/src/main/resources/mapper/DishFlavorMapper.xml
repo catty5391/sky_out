@@ -9,4 +9,13 @@
             </foreach>
         
     </insert>
+    <select id="page" resultType="com.sky.vo.DishVO">
+        select d.*, c.name category_name from sky_take_out.dish d left join sky_take_out.category c on d.category_id = c.Id 
+        <where>
+            <if test="name != null"> and d.name like concat('%',#{name}, '%')</if>
+            <if test="status != null"> and d.status = #{status}</if>
+            <if test="categoryId != null"> and d.category_id = #{categoryId}</if>
+        </where>
+        order by d.update_time desc
+    </select>
 </mapper>

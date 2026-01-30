@@ -99,7 +99,7 @@ public class EmployeeServiceImpl implements EmployeeService {
      * @param employeePageQueryDTO
      * @return
      */
-    public PageResult page(EmployeePageQueryDTO employeePageQueryDTO) {
+    public PageResult<Employee> page(EmployeePageQueryDTO employeePageQueryDTO) {
         //pageNum 查询第几页
         int pageNum = employeePageQueryDTO.getPage();
         //pageSize 每页多少个
@@ -109,7 +109,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         Page<Employee> page = employeeMapper.page(employeePageQueryDTO);
         long total = page.getTotal();
         List<Employee> res = page.getResult();
-        return new PageResult(total, res);
+        return new PageResult<>(total, res);
     }
 
     /**
