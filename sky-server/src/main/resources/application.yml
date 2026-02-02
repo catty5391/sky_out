@@ -31,6 +31,11 @@ spring:
       pool-name: HikariPool-1
       # 设置连接验证的超时时间，默认为5000（5秒），单位是毫秒
       validation-timeout: 5000
+  redis:
+    host: ${sky.redis.host}
+    port: ${sky.redis.port}
+    password: ${sky.redis.password}
+    database: ${sky.redis.database}
 
 mybatis:
   #mapper配置文件
