@@ -9,6 +9,7 @@ import com.sky.dto.DishPageQueryDTO;
 import com.sky.entity.Dish;
 import com.sky.entity.DishFlavor;
 import com.sky.exception.DeletionNotAllowedException;
+import com.sky.exception.UpdateNotAllowedException;
 import com.sky.mapper.DishFlavorMapper;
 import com.sky.mapper.DishMapper;
 import com.sky.mapper.SetmealDishMapper;
@@ -66,7 +67,7 @@ public class DishServiceImpl implements DishService {
     public void deleteBatch(List<Long> ids) {
         // 1. 是否处于起售状态
         for (Long id:ids){
-            Dish dish = dishMapper.getStatusById(id);
+            Dish dish = dishMapper.findById(id);
             if (dish.getStatus() == StatusConstant.ENABLE){
                 throw new DeletionNotAllowedException(MessageConstant.DISH_ON_SALE);
             }
@@ -79,15 +80,45 @@ public class DishServiceImpl implements DishService {
         }
 
         // 3. 删除菜品 + 菜品对应口味
-        for(Long id: ids){
-            dishMapper.deleteById(id);
-            dishFlavorMapper.deleteByDishId(id);
-        }
+//        for(Long id: ids){
+//            dishMapper.deleteById(id);
+//            dishFlavorMapper.deleteByDishId(id);
+//        }
+        dishMapper.deleteByIds(ids);
+        dishFlavorMapper.deleteByDishIds(ids);
 
     }
 
     @Override
     public void updateStatus(Dish dish) {
         dishMapper.update(dish);
+    }
+
+    @Override
+    public void update(DishDTO dishDTO) {
+        Dish dish = new Dish();
+        BeanUtils.copyProperties(dishDTO, dish);
+        // 1. 更新菜品, 检查是否名字是否与现有的重复,并将起售的菜品改为停售
+        dish.setStatus(0);
+        if(dishMapper.findByName(dish) != null){
+            throw new UpdateNotAllowedException("添加名字与已有菜品重复");
+        }
+        dishMapper.update(dish);
+        // 2. 更新口味
+        List<DishFlavor> dishFlavors = dishDTO.getFlavors();
+        dishFlavorMapper.deleteByDishId(dishDTO.getId());
+        dishFlavorMapper.insertBatch(dishFlavors);
+    }
+
+    @Override
+    public DishVO findById(Long id) {
+        //
+        Dish dish = dishMapper.findById(id);
+        DishVO dishVO = new DishVO();
+        BeanUtils.copyProperties(dish, dishVO);
+        // 2. 将flavor放到dishVo中
+        List<DishFlavor> dishFlavors = dishFlavorMapper.getFlavorsByDishId(id);
+        dishVO.setFlavors(dishFlavors);
+        return dishVO;
     }
 }
