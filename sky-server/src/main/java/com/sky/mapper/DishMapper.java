@@ -40,4 +40,7 @@ public interface DishMapper {
     Dish findByName(Dish dish);
 
     void deleteByIds(List<Long> ids);
+
+    @Select("select * from dish where category_id = #{categoryId}")
+    List<Dish> findByCategoryId(Integer categoryId);
 }

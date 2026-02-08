@@ -27,8 +27,12 @@ public class SetMealServiceImpl implements SetMealService {
         Setmeal setmeal = new Setmeal();
         BeanUtils.copyProperties(setmealDTO, setmeal);
         setmealMapper.insert(setmeal);
+        Long setmealId = setmeal.getId();
         // 2. 更新setmeal_dish 表
         List<SetmealDish> setmealDishes = setmealDTO.getSetmealDishes();
+        setmealDishes.forEach(setmealDish -> {
+            setmealDish.setSetmealId(setmealId);
+        });
         setmealDishMapper.insertBatch(setmealDishes);
     }
 }

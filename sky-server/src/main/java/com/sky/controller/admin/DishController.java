@@ -74,12 +74,19 @@ public class DishController {
     @ApiOperation("修改菜品")
     @PutMapping
     public Result<String> updateDish(@RequestBody DishDTO dishDTO){
-
+        log.info("修改菜品信息为：{}", dishDTO);
         dishService.update(dishDTO);
 
         return Result.success("success");
     }
 
+    @ApiOperation("根据分类id查询菜品")
+    @GetMapping("/list")
+    public Result<List<Dish>> findByCategoryId(Integer categoryId){
+        log.info("根据分类id查询菜品，id为：{}", categoryId);
+        List<Dish> dishes = dishService.findByCategoryId(categoryId);
+        return Result.success(dishes);
+    }
 
 
 }

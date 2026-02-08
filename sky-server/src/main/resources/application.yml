@@ -3,7 +3,7 @@ server:
 
 spring:
   profiles:
-    active: dev
+    active: vpn
   main:
     allow-circular-references: true
   datasource:

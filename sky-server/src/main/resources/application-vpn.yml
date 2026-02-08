@@ -1,0 +1,18 @@
+sky:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    host: 192.168.5.142
+    port: 3306
+    database: sky_take_out
+    username: root
+    password: pqh2002P
+  minioss:
+    access-key-id: 5FMKSVa0fYb18mFkFnNY
+    access-key-secret: o5b/kxlY7UmYAmNIW435I9LE6mhrltOcZ8H6QApy
+    bucket-name: sky
+    end-point: http://192.168.5.155:39888
+  redis:
+    host: 192.168.5.142
+    port: 6379
+    password: pqh2002P
+    database: 0
