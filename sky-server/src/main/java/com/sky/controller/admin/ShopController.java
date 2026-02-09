@@ -13,7 +13,7 @@ import javax.annotation.Resource;
 @RestController("adminShopController")
 @RequestMapping("/admin/shop")
 @Slf4j
-@Api("商店相关接口")
+@Api(tags = "商店相关接口")
 public class ShopController {
 
     @Resource
