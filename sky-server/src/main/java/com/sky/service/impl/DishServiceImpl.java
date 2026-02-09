@@ -10,6 +10,7 @@ import com.sky.entity.Dish;
 import com.sky.entity.DishFlavor;
 import com.sky.exception.DeletionNotAllowedException;
 import com.sky.exception.UpdateNotAllowedException;
+import com.sky.mapper.CategoryMapper;
 import com.sky.mapper.DishFlavorMapper;
 import com.sky.mapper.DishMapper;
 import com.sky.mapper.SetmealDishMapper;
@@ -33,6 +34,9 @@ public class DishServiceImpl implements DishService {
 
     @Resource
     SetmealDishMapper setmealDishMapper;
+
+    @Resource
+    CategoryMapper categoryMapper;
     /**
      * 新增菜品
      * @param dishDTO
@@ -67,7 +71,7 @@ public class DishServiceImpl implements DishService {
     public void deleteBatch(List<Long> ids) {
         // 1. 是否处于起售状态
         for (Long id:ids){
-            Dish dish = dishMapper.findById(id);
+            DishVO dish = dishMapper.findById(id);
             if (dish.getStatus() == StatusConstant.ENABLE){
                 throw new DeletionNotAllowedException(MessageConstant.DISH_ON_SALE);
             }
@@ -105,7 +109,11 @@ public class DishServiceImpl implements DishService {
         }
         dishMapper.update(dish);
         // 2. 更新口味
+        Long dishId = dish.getId();
         List<DishFlavor> dishFlavors = dishDTO.getFlavors();
+        dishFlavors.forEach((dishFlavor) ->{
+            dishFlavor.setDishId(dishId);
+        });
         dishFlavorMapper.deleteByDishId(dishDTO.getId());
         dishFlavorMapper.insertBatch(dishFlavors);
     }
@@ -113,10 +121,9 @@ public class DishServiceImpl implements DishService {
     @Override
     public DishVO findById(Long id) {
         //
-        Dish dish = dishMapper.findById(id);
-        DishVO dishVO = new DishVO();
-        BeanUtils.copyProperties(dish, dishVO);
-        // 2. 将flavor放到dishVo中
+        DishVO dishVO = dishMapper.findById(id);
+
+        // 3. 将flavor放到dishVo中
         List<DishFlavor> dishFlavors = dishFlavorMapper.getFlavorsByDishId(id);
         dishVO.setFlavors(dishFlavors);
         return dishVO;
