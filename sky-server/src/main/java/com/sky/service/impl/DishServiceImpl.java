@@ -71,8 +71,8 @@ public class DishServiceImpl implements DishService {
     public void deleteBatch(List<Long> ids) {
         // 1. 是否处于起售状态
         for (Long id:ids){
-            DishVO dish = dishMapper.findById(id);
-            if (dish.getStatus() == StatusConstant.ENABLE){
+            DishVO dishVO = dishMapper.findById(id);
+            if (dishVO.getStatus() == StatusConstant.ENABLE){
                 throw new DeletionNotAllowedException(MessageConstant.DISH_ON_SALE);
             }
         }
@@ -105,7 +105,7 @@ public class DishServiceImpl implements DishService {
         // 1. 更新菜品, 检查是否名字是否与现有的重复,并将起售的菜品改为停售
         dish.setStatus(0);
         if(dishMapper.findByName(dish) != null){
-            throw new UpdateNotAllowedException("添加名字与已有菜品重复");
+            throw new UpdateNotAllowedException(MessageConstant.Dish_Repeated);
         }
         dishMapper.update(dish);
         // 2. 更新口味

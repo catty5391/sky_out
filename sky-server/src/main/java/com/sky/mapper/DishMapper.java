@@ -28,7 +28,7 @@ public interface DishMapper {
     @AutoFill(OperationType.INSERT)
     void insert(Dish dish);
 
-    @Select("select d.*, c.name categoryName from dish d left join sky_take_out.category c on d.category_id = c.id where d.id = #{id}")
+    @Select("select d.*, c.name category_name from dish d left join sky_take_out.category c on d.category_id = c.id where d.id = #{id}")
     DishVO findById(Long id);
 
     @Delete("delete from dish where id = #{id}")
@@ -44,4 +44,7 @@ public interface DishMapper {
 
     @Select("select * from dish where category_id = #{categoryId}")
     List<Dish> findByCategoryId(Integer categoryId);
+
+    @Select("select d.* from dish d INNER JOIN setmeal_dish s on d.id = s.dish_id WHERE setmeal_id = #{setmealId}")
+    List<Dish> getDishesBySetmealId(Long setmealId);
 }
