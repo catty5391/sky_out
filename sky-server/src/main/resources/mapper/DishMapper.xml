@@ -26,4 +26,7 @@
                 #{id}
             </foreach>
     </delete>
+    <select id="list" resultType="com.sky.entity.Dish">
+        select * from sky_take_out.dish where category_id = #{categoryId} and status = #{status}
+    </select>
 </mapper>
