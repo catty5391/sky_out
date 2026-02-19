@@ -112,11 +112,14 @@ public class DishServiceImpl implements DishService {
         // 2. 更新口味
         Long dishId = dish.getId();
         List<DishFlavor> dishFlavors = dishDTO.getFlavors();
-        dishFlavors.forEach((dishFlavor) ->{
-            dishFlavor.setDishId(dishId);
-        });
+
         dishFlavorMapper.deleteByDishId(dishDTO.getId());
-        dishFlavorMapper.insertBatch(dishFlavors);
+        if(dishFlavors != null && !dishFlavors.isEmpty()){
+            dishFlavors.forEach((dishFlavor) ->{
+                dishFlavor.setDishId(dishId);
+            });
+            dishFlavorMapper.insertBatch(dishFlavors);
+        }
     }
 
     @Override

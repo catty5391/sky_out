@@ -47,10 +47,9 @@ public class JwtTokenUserInterceptor implements HandlerInterceptor {
 
         //2、校验令牌
         try {
-            log.info("jwt校验:{}", token);
             Claims claims = JwtUtil.parseJWT(jwtProperties.getUserSecretKey(), token);
             Long userId = Long.valueOf(claims.get(JwtClaimsConstant.USER_ID).toString());
-            log.info("当前用户id:{}", userId);
+            log.info("当前用户id:{}, 请求通过认证, token为:{}", userId,token);
 
             //3、利用线程隔离特性，将每次请求的用户id封装当前线程的独有存储中
             BaseContext.setCurrentId(userId);

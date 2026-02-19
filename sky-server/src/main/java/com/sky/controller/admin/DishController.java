@@ -12,10 +12,12 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @Slf4j
@@ -26,12 +28,17 @@ public class DishController {
     @Resource
     DishService dishService;
 
+    @Resource
+    RedisTemplate<String, Object> redisTemplate;
+
     @ApiOperation("新增菜品")
     @PostMapping
     public Result<String> save(@RequestBody DishDTO dishDTO){
         log.info("新增菜品：{}", dishDTO);
         dishService.save(dishDTO);
-
+        //理论不需要，因为新增菜品默认为停售
+        String pattern = dishDTO.getCategoryId().toString();
+        cleanCache(pattern);
         return Result.success("success");
     }
 
@@ -49,6 +56,7 @@ public class DishController {
     public Result<String> deleteBatch(@RequestParam List<Long> ids){
         log.info("删除菜品id: {}", ids);
         dishService.deleteBatch(ids);
+        cleanCache("dish:category:*");
 
         return Result.success("success");
     }
@@ -76,7 +84,7 @@ public class DishController {
     public Result<String> updateDish(@RequestBody DishDTO dishDTO){
         log.info("修改菜品信息为：{}", dishDTO);
         dishService.update(dishDTO);
-
+        cleanCache("dish:category:*");
         return Result.success("success");
     }
 
@@ -86,6 +94,11 @@ public class DishController {
         log.info("根据分类id查询菜品，id为：{}", categoryId);
         List<Dish> dishes = dishService.findByCategoryId(categoryId);
         return Result.success(dishes);
+    }
+
+    private void cleanCache(String pattern){
+        Set<String> keys = redisTemplate.keys(pattern);
+        redisTemplate.delete(keys);
     }
 
 
