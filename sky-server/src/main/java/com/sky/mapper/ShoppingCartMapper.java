@@ -18,11 +18,11 @@ public interface ShoppingCartMapper {
     @Update("update sky_take_out.shopping_cart set number = #{number} where id = #{id}")
     void changeNum(ShoppingCart shoppingCart);
 
-    @Select("select * from sky_take_out.shopping_cart where user_id = #{userId};")
-    List<ShoppingCart> listByUserId(Long userId);
 
     void delete(ShoppingCart shoppingCart);
 
     @Delete("delete from sky_take_out.shopping_cart where user_id = #{userId}")
     void clean(Long userId);
+
+    void insertBatch(List<ShoppingCart> shoppingCartList);
 }

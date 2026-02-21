@@ -16,4 +16,8 @@ public interface UserMapper {
     @Options(useGeneratedKeys = true, keyProperty = "id")
     @Insert("insert into sky_take_out.user (openid, name, phone, sex, id_number, avatar, create_time) VALUES (#{openid}, #{name}, #{phone}, #{sex}, #{idNumber}, #{avatar}, #{createTime})")
     void insert(User newUser);
+
+    @Select("select * from user where id = #{userId}")
+    User getUserById(Long userId);
+
 }
