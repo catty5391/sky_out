@@ -49,4 +49,7 @@ public interface DishMapper {
     List<Dish> getDishesBySetmealId(Long setmealId);
 
     List<Dish> list(Dish dish);
+
+    @Select("select count(*) from dish where status = #{status}")
+    Integer getAmountByStatus(int status);
 }

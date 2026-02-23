@@ -20,16 +20,14 @@ import com.sky.vo.OrderPaymentVO;
 import com.sky.vo.OrderStatisticsVO;
 import com.sky.vo.OrderSubmitVO;
 import com.sky.vo.OrderVO;
+import com.sky.websocket.WebSocketServer;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -51,6 +49,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Resource
     private WeChatPayUtil weChatPayUtil;
+
+    @Resource
+    private WebSocketServer webSocketServer;
 
     @Transactional
     public OrderSubmitVO submitOrder(OrdersSubmitDTO ordersSubmitDTO) {
@@ -161,6 +162,13 @@ public class OrderServiceImpl implements OrderService {
                 .build();
 
         orderMapper.update(orders);
+
+        // 通过websocket 向管理端推送消息
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("type", 1);
+        jsonObject.put("content", "订单号：" + outTradeNo);
+        jsonObject.put("orderId", ordersDB.getId());
+        webSocketServer.sendToAllClient(jsonObject.toString());
     }
 
     /**
@@ -333,6 +341,20 @@ public class OrderServiceImpl implements OrderService {
         order.setDeliveryTime(LocalDateTime.now());
         orderMapper.update(order);
     }
+
+    @Override
+    public void remind(long id) {
+        Orders orders = orderMapper.getById(id);
+        if(orders == null) throw new OrderBusinessException(MessageConstant.ORDER_STATUS_ERROR);
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("type", 2);
+        map.put("orderId", id);
+        map.put("content", "订单号：" + orders.getNumber() );
+        String res = JSONObject.toJSONString(map);
+        webSocketServer.sendToAllClient(res);
+    }
+
 
     private String getOrderDishesStr(List<OrderDetail> orderDetailList) {
         List<String> strings = orderDetailList.stream().map(orderDetail -> {

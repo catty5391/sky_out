@@ -60,5 +60,21 @@
         </where>
         order by order_time desc
     </select>
+    <select id="getSumAmount" resultType="java.math.BigDecimal">
+        select sum(amount) from sky_take_out.orders
+        <where>
+            <if test="start != null">and order_time >= #{start}</if>
+            <if test="end != null">and order_time &lt; #{end}</if>
+            <if test="status != null">and status = #{status}</if>
+        </where>
+    </select>
+    <select id="getOrderNumByTime" resultType="java.lang.Integer">
+        select count(*) from sky_take_out.orders
+        <where>
+            <if test="start != null">and order_time >= #{start}</if>
+            <if test="end != null">and order_time &lt; #{end}</if>
+            <if test="status != null">and status = #{status}</if>
+        </where>
+    </select>
 
 </mapper>

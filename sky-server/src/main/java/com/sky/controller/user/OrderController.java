@@ -11,6 +11,7 @@ import com.sky.service.OrderService;
 import com.sky.vo.OrderPaymentVO;
 import com.sky.vo.OrderSubmitVO;
 import com.sky.vo.OrderVO;
+import com.sky.websocket.WebSocketServer;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -19,6 +20,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 
 @Slf4j
 @RestController("userOrder")
@@ -27,6 +30,9 @@ import java.time.LocalDateTime;
 public class OrderController {
     @Resource
     OrderService orderService;
+
+    @Resource
+    WebSocketServer webSocketServer;
 
     @PostMapping("/submit")
     public Result<OrderSubmitVO> submitOrder(@RequestBody OrdersSubmitDTO ordersSubmitDTO){
@@ -91,6 +97,14 @@ public class OrderController {
         Orders orders = new Orders();
         orders.setId(id);
         orderService.repetition(orders);
+        return Result.success();
+    }
+
+    @GetMapping("/reminder/{id}")
+    @ApiOperation("催单")
+    public Result<String> remind(@PathVariable long id){
+        log.info("催单:{}", id);
+        orderService.remind(id);
         return Result.success();
     }
 }

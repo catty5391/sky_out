@@ -27,4 +27,7 @@ public class MessageConstant {
     public static final String Dish_Repeated = "名字与已有菜品重复";
     public static final String Setmeal_Repeated = "名字与已有套餐重复";
     public static final String ORDER_CANCEL_ERROR = "无法取消订单";
+    public static final String ORDER_TIME_OUT = "订单超时";
+    public static final String AlREADY_FINISH = "订单已派送完成";
+
 }
